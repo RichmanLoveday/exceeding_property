@@ -1,0 +1,152 @@
+{
+  "success": true,
+  "statusCode": 200,
+  "message": "Waitlists retrieved successfully",
+  "data": {
+    "waitlists": [
+      {
+        "user": {
+          "_id": "656db89d232f948db3c4b770",
+          "name": "John",
+          "username": "Johnny",
+          "email": "john2@gmail.com",
+          "role": "user",
+          "createdAt": "2023-12-04T11:31:41.924Z",
+          "updatedAt": "2023-12-04T11:31:41.924Z",
+          "__v": 0
+        },
+        "waitlist": [
+          {
+            "ratings": {
+              "1": 0,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "totalRatings": 0
+            },
+            "ratedBy": [],
+            "deleted": false,
+            "_id": "65396a439d000a835c55e21a",
+            "name": "red light updated",
+            "description": "this is product one",
+            "category": "this is product one",
+            "images": [
+              "https://iili.io/JKr5yEg.png",
+              "https://iili.io/JKr5MXt.png"
+            ],
+            "price": 30000,
+            "discountPrice": 29000,
+            "createdAt": "2023-10-25T19:19:31.549Z",
+            "updatedAt": "2023-11-21T20:43:24.426Z",
+            "__v": 0,
+            "stock": 10,
+            "id": "65396a439d000a835c55e21a"
+          },
+          {
+            "ratings": {
+              "1": 0,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "totalRatings": 0
+            },
+            "ratedBy": [],
+            "deleted": false,
+            "_id": "new_product_id_here",
+            "name": "New Product",
+            "description": "Description of the new product",
+            "category": "Category of the new product",
+            "images": [
+              "https://iili.io/NewProductImage1.png",
+              "https://iili.io/NewProductImage2.png"
+            ],
+            "price": 50000,
+            "discountPrice": 48000,
+            "createdAt": "2023-12-05T08:35:00.000Z",
+            "updatedAt": "2023-12-05T08:35:00.000Z",
+            "__v": 0,
+            "stock": 20,
+            "id": "new_product_id_here"
+          },
+          {
+            "ratings": {
+              "1": 0,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "totalRatings": 0
+            },
+            "ratedBy": [],
+            "deleted": false,
+            "_id": "live_five_product_id_here",
+            "name": "Live Five",
+            "description": "Description of Live Five",
+            "category": "Category of Live Five",
+            "images": [
+              "https://iili.io/LiveFiveImage1.png",
+              "https://iili.io/LiveFiveImage2.png"
+            ],
+            "price": 70000,
+            "discountPrice": 65000,
+            "createdAt": "2023-12-05T09:00:00.000Z",
+            "updatedAt": "2023-12-05T09:00:00.000Z",
+            "__v": 0,
+            "stock": 15,
+            "id": "live_five_product_id_here"
+          }
+        ]
+      },
+      {
+        "user": {
+          "_id": "user_id_2_here",
+          "name": "Alice",
+          "username": "Alicious",
+          "email": "alice@gmail.com",
+          "role": "user",
+          "createdAt": "2023-12-05T10:00:00.000Z",
+          "updatedAt": "2023-12-05T10:00:00.000Z",
+          "__v": 0
+        },
+        "waitlist": [
+          {
+            "ratings": {
+              "1": 0,
+              "2": 0,
+              "3": 0,
+              "4": 0,
+              "5": 0,
+              "totalRatings": 0
+            },
+            "ratedBy": [],
+            "deleted": false,
+            "_id": "product_id_for_alice",
+            "name": "Product for Alice",
+            "description": "Description for Alice's product",
+            "category": "Category for Alice's product",
+            "images": [
+              "https://iili.io/AliceProductImage1.png",
+              "https://iili.io/AliceProductImage2.png"
+            ],
+            "price": 45000,
+            "discountPrice": 42000,
+            "createdAt": "2023-12-05T10:05:00.000Z",
+            "updatedAt": "2023-12-05T10:05:00.000Z",
+            "__v": 0,
+            "stock": 12,
+            "id": "product_id_for_alice"
+          }
+        ]
+      }
+    ],
+    "pagination": {
+      "currentPage": 1,
+      "totalPages": 4,
+      "totalRecords": 4,
+      "hasNextPage": true,
+      "hasPrevPage": false
+    }
+  }
+}
