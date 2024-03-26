@@ -23,6 +23,9 @@ import AppLayout from "./components/ui/AppLayout";
 import { MyContext } from "../src/pages/MyContext";
 import Waitlist from "./pages/WaitList";
 import ExternalLayout from "./components/ui/ExternalLayout";
+import Category from "./pages/Category";
+import Transaction from "./pages/Transaction";
+import UserTransactions from "./pages/UserTransactions";
 
 const router = createBrowserRouter([
   {
@@ -99,10 +102,34 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/transaction",
+        element: (
+          <ProtectedRoute>
+            <Transaction />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/transaction/:userID",
+        element: (
+          <ProtectedRoute>
+            <UserTransactions />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "/waitlist/:waitlistId",
         element: (
           <ProtectedRoute>
             <Orders />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/category",
+        element: (
+          <ProtectedRoute>
+            <Category />
           </ProtectedRoute>
         ),
       },
@@ -119,7 +146,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [openModal, setOpenModal] = useState(false);
+  const [pageNum, setPageNum] = useState(false);
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -133,7 +160,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <MyContext.Provider value={{ openModal, setOpenModal }}>
+        <MyContext.Provider value={{ pageNum, setPageNum }}>
           {/* <Header /> */}
           <RouterProvider router={router} />
           <ReactQueryDevtools initialIsOpen={false} />

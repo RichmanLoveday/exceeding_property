@@ -3,7 +3,6 @@ import { Button } from "flowbite-react";
 
 function WaitlistProduct({
   image,
-  customer_name,
   name,
   price,
   productID,

@@ -1,29 +1,32 @@
 import { disableProduct } from "@/services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCookies } from "react-cookie";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 
 function useDisableProduct() {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate: productDisable, isPending: isDisabaling } = useMutation({
+  const [cookies] = useCookies(["exc_prop_user"]);
+
+  const {
+    mutate: productDisable,
+    isPending: isDisabaling,
+    isError,
+  } = useMutation({
     // communicate with api disable product
-    mutationFn: (productId) => disableProduct(productId),
+    mutationFn: (productId: string) =>
+      disableProduct(productId, cookies.exc_prop_user),
 
     onSuccess: (data) => {
-      toast.success(`Product disabled successfully`);
+      toast.success(data.message);
       queryClient.invalidateQueries({
-        queryKey: ["all_products"],
+        type: "active",
       });
-
-      // navigate to produts
-      navigate("/products");
     },
 
-    onError: () => toast.error("Unable to disable product"),
+    onError: (data) => toast.error(data.message),
   });
 
-  return { productDisable, isDisabaling };
+  return { productDisable, isDisabaling, isError };
 }
 
 export default useDisableProduct;

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom"
-import { Button } from "../ui/button"
-import { Image, PlusCircle } from "lucide-react"
+import { Link } from "react-router-dom";
+import { Button } from "../ui/button";
+import { Image } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -9,29 +9,19 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table"
+} from "../ui/table";
 
 export default function ProductSkeleton() {
   return (
     <>
       <div className="h-1 my-10" />
-      <div className="flex items-center justify-between gap-5">
-        <h1 className="py-10 text-2xl font-semibold text-left">Products</h1>
-        <Button className="flex items-center gap-5" asChild>
-          <Link to={"/add-product"}>
-            <PlusCircle className="w-5" />
-            Add New Product
-          </Link>
-        </Button>
-      </div>
-
       <Table>
         <TableCaption>A list of your products...</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="min-w-[20rem]">Product</TableHead>
             <TableHead className="text-left w-52">Created At</TableHead>
-            <TableHead className="text-left w-52">Status</TableHead>
+            <TableHead className="text-lef w-52">Status</TableHead>
             <TableHead className="text-right ">Amount</TableHead>
           </TableRow>
         </TableHeader>
@@ -70,5 +60,5 @@ export default function ProductSkeleton() {
         </TableBody>
       </Table>
     </>
-  )
+  );
 }

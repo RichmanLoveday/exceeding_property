@@ -1,11 +1,9 @@
-import { Outlet, useNavigation } from "react-router-dom";
-import Header from "../Header";
+import { Outlet } from "react-router-dom";
 
 function ExternalLayout() {
   return (
     <>
-      <Header />
-      <Outlet />;
+      <Outlet />
     </>
   );
 }

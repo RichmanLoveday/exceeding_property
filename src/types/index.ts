@@ -20,6 +20,7 @@ export type ProductProps = {
   discountPrice: string | number;
   createdAt: string;
   updatedAt: string;
+  status: string;
 };
 
 export type UserProps = {
@@ -57,7 +58,9 @@ export interface ProductRow {
   description: string;
   createdAt: string;
   stock: number;
+  status: string;
   price: number;
+  loadingProduct: boolean;
   images: any[]; // Assuming image is an array of strings
 }
 

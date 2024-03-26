@@ -41,7 +41,25 @@ export function calculateDiscountPercentage(
 }
 
 export function determineStatus(stock: string | number) {
-  return +stock == 0 ? "out of stock" : +stock < 5 ? "low stock" : "in stock";
+  let color;
+  let text;
+
+  if (+stock == 0) {
+    text = "out of stock";
+    color = "failure";
+  }
+
+  if (+stock < 5) {
+    text = "Low stock";
+    color = "warning";
+  }
+
+  if (+stock >= 5) {
+    text = "In stock";
+    color = "success";
+  }
+
+  return { text, color };
 }
 
 export function checkOrderStatus(status: string) {
@@ -64,8 +82,24 @@ export function checkOrderStatus(status: string) {
   }
 
   if (status == "CANCELLED") {
-    className = "failure";
-    text = "Failed";
+    className = "red";
+    text = "Cancelled";
+  }
+
+  return { className, text };
+}
+
+export function checkDeliveryStatus(status: string) {
+  let className;
+  let text;
+  if (status == "NOT_DELIVERED") {
+    text = "Awaiting";
+    className = "warning";
+  }
+
+  if (status == "NOT_DELIVERED") {
+    text = "Delivered";
+    className = "success";
   }
 
   return { className, text };
@@ -106,4 +140,40 @@ export function sumOfArr(arr) {
     return acc + curr;
   }, 0);
   return sum;
+}
+
+export function checkTransactionStatus(status: string) {
+  let className;
+
+  if (status == "Verified") {
+    className = "success";
+  }
+
+  if (status == "Unverified") {
+    className = "warning";
+  }
+
+  return { className };
+}
+
+export function dateFormat(dateString: string) {
+  const [month, day, year] = new Date(dateString)
+    .toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    })
+    .split(" ");
+
+  const dayInt = parseInt(day);
+  const suffix =
+    dayInt === 1 || dayInt === 21 || dayInt === 31
+      ? "st"
+      : dayInt === 2 || dayInt === 22
+      ? "nd"
+      : dayInt === 3 || dayInt === 23
+      ? "rd"
+      : "th";
+
+  return `${month} ${dayInt}${suffix} ${year}`;
 }

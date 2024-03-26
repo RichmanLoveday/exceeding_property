@@ -2,16 +2,26 @@ import { Button, Label, Select, Spinner, TextInput } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { useProduct } from "../Products/useProduct";
 import useAddWailist from "../orders/useAddWaitList";
+import { useEffect } from "react";
 
-function AddWaitlist({ userId, customerName }) {
+function AddWaitlist({ userId, customerName, handleCloseModal }) {
   const { products, loadingProducts } = useProduct();
-  const { handleAddWaitlist, isAddingWaitlist } = useAddWailist();
+  const { handleAddWaitlist, isAddingWaitlist, isAddedWaitlist } =
+    useAddWailist();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       userId: userId,
       customerName: customerName,
     },
   });
+
+  //? check if category is added and close modal
+  useEffect(() => {
+    //? close modal
+    if (isAddedWaitlist) {
+      handleCloseModal();
+    }
+  }, [isAddedWaitlist]);
 
   // send data to api
   function onSubmit(data) {

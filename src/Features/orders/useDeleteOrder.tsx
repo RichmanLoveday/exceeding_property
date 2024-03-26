@@ -1,29 +1,37 @@
-import { disableProduct } from "@/services/api";
+import { deleteOrder } from "@/services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useCookies } from "react-cookie";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 function useOrderDelete() {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate: orderDelete, isPending: isDeleting } = useMutation({
-    // communicate with api disable product
-    mutationFn: (orderId) => disableProduct(orderId),
+  const navigate = useNavigate();
+  const [cookies] = useCookies(["exc_prop_user"]);
 
-    onSuccess: (data) => {
+  const {
+    mutate: orderDelete,
+    isPending: isDeleting,
+    isSuccess: isDeleted,
+  } = useMutation({
+    // communicate with api to delete order
+    mutationFn: (orderId: string) =>
+      deleteOrder(orderId, cookies.exc_prop_user),
+
+    onSuccess: () => {
       toast.success(`Order deleted successfully`);
       queryClient.invalidateQueries({
         queryKey: ["all_orders"],
       });
 
-      // navigate to produts
+      //? goback to all order page
       navigate("/orders");
     },
 
     onError: () => toast.error("Unable to delete prder"),
   });
 
-  return { orderDelete, isDeleting };
+  return { orderDelete, isDeleting, isDeleted };
 }
 
 export default useOrderDelete;

@@ -11,8 +11,8 @@ function useUpdateOrderStatus() {
     mutationFn: ({ orderId, type }) =>
       updateOrderStatus(orderId, type, cookies.exc_prop_user),
 
-    onSuccess: (type) => {
-      toast.success(`Order is set to ${type}`);
+    onSuccess: (data) => {
+      toast.success(`Order is set to ${data.orderStatus}`);
       queryClient.invalidateQueries({ active: true });
     },
 

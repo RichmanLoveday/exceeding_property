@@ -1,37 +1,41 @@
 import PaginationCounter from "@/components/ui/pagination";
-import { Table } from "flowbite-react";
+import { Modal, Table } from "flowbite-react";
 import OrdersTableHeader from "./OrdersTableHeader";
-import ModalComp from "@/components/ui/Modal";
 import DeleteComp from "@/components/ui/Delete";
 import { useOrders } from "@/Features/orders/useOrders";
-import { MyContext } from "@/pages/MyContext";
-import { useContext, useState } from "react";
 import useOrderDelete from "@/Features/orders/useDeleteOrder";
 import ClipLoader from "react-spinners/ClipLoader";
 import OrderRow from "./OrderRow";
 import useUpdateOrderStatus from "./useUpdateOrderStatus";
+import { useState } from "react";
 // import orders from "../../services/data/orders.json";
 
 function OrdersTable() {
-  const { loadingOrders, orders, error } = useOrders();
-  const { openModal, setOpenModal } = useContext(MyContext);
-  const { updateStatus, isUpdating } = useUpdateOrderStatus();
-  const { orderDelete, isDeleting } = useOrderDelete();
+  const [openModal, setOpenModal] = useState(false);
   const [orderId, setOrderId] = useState();
-  const Orders = orders;
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const { loadingOrders, orders, error } = useOrders(currentPage);
+  const { updateStatus, isUpdating } = useUpdateOrderStatus();
+  const { orderDelete, isDeleting, isDeleted } = useOrderDelete();
+  const Orders = orders?.docs;
+
+  const toatalPages = orders?.totalDocs;
   const handleOrderId = (orderId: string) => {
     setOpenModal(!openModal);
     setOrderId(orderId);
   };
 
-  const handleUpdateOrder = (orderId, type) => {
+  const handleUpdateOrder = (orderId: string, type: string) => {
     updateStatus({ orderId, type });
   };
 
   const handleDeleteOrder = () => {
     orderDelete(orderId);
-    setOpenModal(!openModal);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   if (loadingOrders)
@@ -63,15 +67,34 @@ function OrdersTable() {
           </Table.Body>
         </Table>
       </div>
-      <PaginationCounter count={Orders?.length} />
 
-      <ModalComp>
-        <DeleteComp
-          message="Are you sure you want to delete this order"
-          handleDelete={handleDeleteOrder}
-          isDeleting={isDeleting}
+      {toatalPages > 1 ? (
+        <PaginationCounter
+          count={toatalPages}
+          handlePageChange={handlePageChange}
+          currentpage={currentPage}
         />
-      </ModalComp>
+      ) : (
+        ""
+      )}
+
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={() => setOpenModal(false)}
+        popup
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <DeleteComp
+            message="Are you sure you want to delete this order"
+            handleDelete={handleDeleteOrder}
+            isDeleting={isDeleting}
+            setOpenModal={setOpenModal}
+            isDeleted={isDeleted}
+          />
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

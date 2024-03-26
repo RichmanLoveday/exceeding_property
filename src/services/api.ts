@@ -1,100 +1,146 @@
-import { AddProductProps } from "@/types";
 import axios from "axios";
-import waitlist from "../services/data/waitlist.json";
-import orders from "../services/data/orders.json";
-
-const BASE_URL = "https://exceedingproperties-production.up.railway.app";
+const BASE_URL = "https://exceedingproperties.onrender.com";
 
 export async function LoginUser(email: string, password: string) {
-  console.log(email, password);
   const res = await axios.post(`${BASE_URL}/auth/login`, {
     email,
     password,
+  });
+
+  return res.data;
+}
+
+export async function getProducts(token, pageNum) {
+  const res = await axios.get(
+    `${BASE_URL}/products/paginated?page=${pageNum}&limit=5`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.data.success) {
+    throw new Error("Unable to fetch data");
+  }
+
+  return res.data.data;
+}
+
+export async function getProductById({
+  productId,
+  token,
+}: {
+  productId: string | undefined;
+  token: string;
+}) {
+  const res = await axios.get(`${BASE_URL}/products/${productId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+}
+
+export async function createProduct(products, token) {
+  console.log(products);
+  const res = await axios.post(`${BASE_URL}/products`, products, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+}
+
+export async function editProduct(productId, products, token) {
+  console.log(token);
+
+  const res = await axios.put(`${BASE_URL}/products/${productId}`, products, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   console.log(res);
   return res.data;
 }
 
-export async function getProducts() {
-  const res = await axios.get(`${BASE_URL}/products`);
+export async function getOrders(token: string, pageNum: number) {
+  const res = await axios.get(
+    `${BASE_URL}/order/admin-orders?page=${pageNum}&limit=5`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  if (!res.data.success) {
-    throw new Error("Unable to fetch data");
-  }
-
-  return res.data;
-}
-
-export async function getProductById({
-  productId,
-}: {
-  productId: string | undefined;
-}) {
-  const res = await axios.get(`${BASE_URL}/products/${productId}`);
-
-  return res.data;
-}
-
-export async function createProduct({ ...props }: AddProductProps) {
-  console.log(props);
-  const res = await axios.post(`${BASE_URL}/products`, {
-    ...props,
-  });
-
-  return res.data;
-}
-
-export async function editProduct({ ...props }: AddProductProps) {
-  const res = await axios.put(`${BASE_URL}/products/${props._id}`, {
-    ...props,
-  });
-
-  return res.data;
-}
-
-export async function getOrders(token: string) {
-  const res = await axios.get(`${BASE_URL}/order`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  console.log(res.data);
   return res.data.data;
 }
 
-export async function disableProduct(productId: string) {
-  console.log(productId);
+export async function disableProduct(productId: string, token: string) {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/products/status`,
+      {
+        productId: productId,
+        status: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res.data;
+  } catch (e) {
+    return "Unable to change status";
+  }
 }
 
-export async function enableProduct(productId: string) {
-  console.log(productId);
+export async function enableProduct(productId: string, token: string) {
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/products/status`,
+      {
+        productId: productId,
+        status: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return res.data;
+  } catch (e) {
+    return "Unable to change status";
+  }
 }
 
-export async function deleteOrder(orderId: string) {
-  console.log(orderId);
-}
-
-export async function getOrderById(orderId: string, token: string) {
-  console.log("Yessssssssss");
-  const res = await axios.get(`${BASE_URL}/order`, {
+export async function deleteOrder(orderId: string, token: string) {
+  console.log(orderId, token);
+  const res = await axios.delete(`${BASE_URL}/order/${orderId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(res.data);
-  // return res.data.data;
+
+  return res.data.data;
 }
 
-export async function editOrder(
-  orderId: string,
-  productId: string,
-  quantity: string
-) {
-  console.log(orderId);
-  console.log(productId);
-  console.log(quantity);
+export async function getOrderById(orderId: string, token: string) {
+  const res = await axios.get(`${BASE_URL}/order/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data.data;
 }
 
 export async function updateOrderStatus(
@@ -102,10 +148,6 @@ export async function updateOrderStatus(
   type: string,
   token: string
 ) {
-  console.log(orderId);
-  console.log(type);
-  console.log(token);
-
   let data = {
     orderStatus: "PENDING",
     deliveryStatus: "PENDING",
@@ -113,12 +155,12 @@ export async function updateOrderStatus(
 
   if (type === "pending") {
     data.orderStatus = "PENDING";
-    data.deliveryStatus = "PENDING";
+    data.deliveryStatus = "PREPARING";
   }
 
-  if (type === "processing") {
+  if (type === "preparing") {
     data.orderStatus = "PROCESSING";
-    data.deliveryStatus = "PROCESSING";
+    data.deliveryStatus = "IN_TRANSIT";
   }
 
   if (type === "delivered") {
@@ -128,10 +170,8 @@ export async function updateOrderStatus(
 
   if (type === "cancelled") {
     data.orderStatus = "CANCELLED";
-    data.deliveryStatus = "CANCELLED";
+    data.deliveryStatus = "NOT_DELIVERED";
   }
-
-  console.log(data);
 
   const res = await axios.put(`${BASE_URL}/order/${orderId}`, data, {
     headers: {
@@ -139,11 +179,10 @@ export async function updateOrderStatus(
     },
   });
 
-  console.log(res.data);
-
   return res.data.data;
 }
 
+//? for waitlists
 export async function getWaitlists(token: string) {
   const res = await axios.get(
     `${BASE_URL}/waitlist/admin/list?page=1&limit=5`,
@@ -154,9 +193,80 @@ export async function getWaitlists(token: string) {
     }
   );
 
-  console.log(res.data.data);
+  console.log(res.data);
   // return waitlist.data;
   return res.data.data;
+}
+
+//? get all category
+export async function getCategories(token: string) {
+  const res = await axios.get(`${BASE_URL}/categories`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+  return res.data.data;
+}
+
+//? get paginated category
+export async function getPaginatedCategories(token, pageNum) {
+  const res = await axios.get(
+    `${BASE_URL}/categories/paginated?page=${pageNum}&limit=2`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.data.data;
+}
+
+//? Add new  category
+export async function addNewCategory(category: object, token: string) {
+  console.log(category);
+
+  const res = await axios.post(`${BASE_URL}/categories`, category, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+}
+
+//? Delete Category
+export async function deleteCategory(categoryID: string, token: string) {
+  console.log(categoryID);
+  const res = await axios.delete(`${BASE_URL}/categories/${categoryID}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+}
+
+//? update category
+export async function updateCategory(
+  category: object,
+  categoryID: string,
+  token: string
+) {
+  console.log(categoryID);
+  const res = await axios.put(
+    `${BASE_URL}/categories/${categoryID}`,
+    category,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.data;
 }
 
 export async function waitlistRemove(
@@ -179,17 +289,55 @@ export async function addToWaitlist(
   productId: string,
   token: string
 ) {
-  const res = await axios.post(`${BASE_URL}/waitlist/admin/add`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: {
+  const res = await axios.post(
+    `${BASE_URL}/waitlist/admin/add`,
+    {
       userId: userId,
       productId: productId,
     },
-  });
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-  // console.log(res.data);
+  console.log(res.data);
+
+  return res.data;
+}
+
+//? get all transactions
+export async function getTransactions(token: string, pageNum: number) {
+  const res = await axios.get(
+    `${BASE_URL}/transactions/admin/all?page=${pageNum}&limit=5`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  console.log(res.data);
+
+  // return waitlist.data;
+  return res.data.data;
+}
+
+export async function getUserTransactions(
+  token: string,
+  pageNum: number,
+  userID: string | undefined
+) {
+  const res = await axios.post(
+    `${BASE_URL}/transactions/admin?page=${pageNum}&limit=5`,
+    { userId: userID },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   return res.data.data;
 }

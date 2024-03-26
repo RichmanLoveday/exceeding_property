@@ -2,7 +2,7 @@ import { getOrders } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { useCookies } from "react-cookie";
 
-export function useOrders() {
+export function useOrders(pageNum: number) {
   const [cookies] = useCookies(["exc_prop_user"]);
 
   const {
@@ -10,8 +10,8 @@ export function useOrders() {
     isLoading: loadingOrders,
     error,
   } = useQuery({
-    queryFn: () => getOrders(cookies.exc_prop_user),
-    queryKey: ["all_orders"],
+    queryFn: () => getOrders(cookies.exc_prop_user, pageNum),
+    queryKey: [`all_orders-page-${pageNum}`],
   });
 
   return { orders, loadingOrders, error };

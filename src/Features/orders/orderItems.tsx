@@ -1,8 +1,5 @@
 import { formatNigerianPrice } from "@/lib/utils";
-import { Button } from "flowbite-react";
-import { Pencil, X } from "lucide-react";
-
-function OrderItems({ orders = {}, handleOrderEdit }) {
+function OrderItems({ orders = {} }) {
   console.log(orders);
   const { products } = orders;
   return (
@@ -20,9 +17,6 @@ function OrderItems({ orders = {}, handleOrderEdit }) {
         <div className="text-slate-400 capitalize dark:text-white dark:font-light">
           Sub-Total
         </div>
-        <div className="text-slate-400 capitalize dark:text-white dark:font-light">
-          <Pencil />
-        </div>
       </div>
 
       {products.map((prod, index) => (
@@ -36,20 +30,12 @@ function OrderItems({ orders = {}, handleOrderEdit }) {
           <div className="font-normal tracking-wide -ml-[50px] w-[10%] float-left">
             <span>{formatNigerianPrice(prod.product.price)}</span>
           </div>
-          <div className="font-normal flex justify-center -ml-[50px] items-baseline w-[10%] text-center">
-            <X size="12" />
+          <div className="font-normal flex justify-center -ml-[50px] items-baseline w-[10%] text-center font-extrabold">
             {prod.quantity}
           </div>
           <div className="font-normal flex justify-center items-baseline w-[10%] text-center">
             {formatNigerianPrice(prod.product.price * prod.quantity)}
           </div>
-          <Button
-            onClick={() => handleOrderEdit(prod.quantity, prod.product._id)}
-            size="sm"
-            color="blue"
-          >
-            Edit
-          </Button>
         </div>
       ))}
     </div>

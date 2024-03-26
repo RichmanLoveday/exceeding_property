@@ -1,11 +1,26 @@
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { Button } from "flowbite-react";
-import { useContext } from "react";
-import { MyContext } from "@/pages/MyContext";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
-function DeleteComp({ message, isDeleting, handleDelete }) {
-  const { setOpenModal } = useContext(MyContext);
-
+function DeleteComp({
+  message,
+  isDeleting,
+  handleDelete,
+  isDeleted,
+  setOpenModal,
+}: {
+  message: string;
+  isDeleting: boolean;
+  handleDelete: () => void;
+  setOpenModal: Dispatch<SetStateAction<boolean>>;
+  isDeleted: boolean;
+}) {
+  useEffect(() => {
+    //? Close modal after deletion
+    if (isDeleting) {
+      setOpenModal(false);
+    }
+  }, [isDeleting]);
   return (
     <div className="text-center">
       <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />

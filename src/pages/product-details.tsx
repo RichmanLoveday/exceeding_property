@@ -1,20 +1,35 @@
 import BackButton from "@/components/back";
 import { ProductImageCarousel } from "@/components/product-image-carousel";
 import ProductDetailsSkeleton from "@/components/skeleton/product-details";
-import { Button } from "@/components/ui/button";
+
 import { Separator } from "@/components/ui/separator";
 import { calculateDiscountPercentage, formatNigerianPrice } from "@/lib/utils";
 import { ProductProps } from "@/types";
 import { Edit } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useProductDatails from "../Features/Products/useProductDetails";
 import useDisableProduct from "../Features/Products/useDisableProduct";
 import useEnableProduct from "../Features/Products/useEnableProduct";
+import { Button } from "flowbite-react";
+import useCategory from "@/Features/Category/useCategory";
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
 
 export default function ProductDetails() {
   const { productData, isLoading, error } = useProductDatails();
   const { productDisable, isDisabaling } = useDisableProduct();
   const { productEnable, isEnabling } = useEnableProduct();
+  const { category, loadingCatgory } = useCategory();
+
+  const [cookies] = useCookies();
+  const navigate = useNavigate();
+
+  //? check user login
+  useEffect(() => {
+    if (typeof cookies.exc_prop_user == "object") {
+      navigate("/login");
+    }
+  }, [cookies.exc_prop_user]);
 
   const product = productData?.data as ProductProps;
 
@@ -23,7 +38,7 @@ export default function ProductDetails() {
     product?.discountPrice as number
   );
 
-  // handle loading state
+  //? handle loading state
   if (isLoading) {
     return <ProductDetailsSkeleton />;
   }
@@ -54,16 +69,15 @@ export default function ProductDetails() {
         <div className="w-full space-y-5 text-left md:w-1/2">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold capitalize">{product?.name}</h2>
-            <Button variant={"link"}>
+            <Button
+              size="xs"
+              className="transition-all  hover:shadow-md hover:bg-slate-400"
+            >
               <Link to={`/product/${product?._id}/edit`}>
                 <Edit />
               </Link>
             </Button>
           </div>
-
-          <Button asChild>
-            <p>{product?.category}</p>
-          </Button>
 
           <div>
             <p>Description: </p>
@@ -86,28 +100,32 @@ export default function ProductDetails() {
                 <p className="text-red-500">{discount}%</p>
               </div>
               <p className="text-base text-muted-foreground">
-                {formatNigerianPrice(product?.discountPrice as number)}
+                {formatNigerianPrice(product?.discountPrice)}
               </p>
             </div>
 
             <p>{product?.stock} stock left</p>
           </div>
           {product?.status ? (
-            <button
-              className="float-right border-0 rounded-sm bg-slate-300 text-sm text-black p-4 hover:shadow-md hover:bg-slate-400 transition-all font-medium"
+            <Button
+              size="xs"
+              color="failure"
+              className="float-right border-0 rounded-sm text-sm text-white p-1 hover:shadow-md hover:bg-slate-400 transition-all font-medium"
               onClick={() => productDisable(product?._id)}
               disabled={isDisabaling}
             >
               <p>Disable Product</p>
-            </button>
+            </Button>
           ) : (
-            <button
-              className="float-right border-0 rounded-sm bg-slate-300 text-sm text-black p-4 hover:shadow-md hover:bg-slate-400 transition-all font-medium"
+            <Button
+              size="xs"
+              color="success"
+              className="float-right border-0 rounded-sm text-sm text-white p-1 hover:shadow-md hover:bg-slate-400 transition-all font-medium"
               onClick={() => productEnable(product?._id)}
               disabled={isEnabling}
             >
               <p>Enable Product</p>
-            </button>
+            </Button>
           )}
         </div>
       </div>

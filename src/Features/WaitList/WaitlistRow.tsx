@@ -15,8 +15,8 @@ function WaitlistRow({
       <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
         <span>{customer_name}</span>
       </Table.Cell>
-      <Table.Cell className="flex justify-start items-baseline mx-auto">
-        {no_of_waitlist}
+      <Table.Cell className="items-baseline text-center">
+        <span className="text-center font-bold">{no_of_waitlist}</span>
       </Table.Cell>
 
       <Table.Cell>

@@ -1,32 +1,27 @@
 import PaginationCounter from "@/components/ui/pagination";
-import { Table } from "flowbite-react";
-import ModalComp from "@/components/ui/Modal";
+import { Modal, Table } from "flowbite-react";
 import WaitlistTableHeader from "./WaitlistTableHeader";
 import useWaitlist from "./useWaitlist";
 import WaitlistRow from "./WaitlistRow";
-import { useContext, useEffect, useRef, useState } from "react";
-import { MyContext } from "@/pages/MyContext";
+import { useEffect, useRef, useState } from "react";
 import WaitlistProduct from "./WaitlistProduct";
-import { useQueryClient } from "@tanstack/react-query";
 import useDeleteWaitlist from "./useDeleteWaitlist";
 import AddWaitlist from "./WaitListEdit";
 import ClipLoader from "react-spinners/ClipLoader";
 
 function WaitlistTable() {
-  const { openModal, setOpenModal } = useContext(MyContext);
+  const [openModal, setOpenModal] = useState(false);
   const { waitlist, loadingWaitlist, error } = useWaitlist();
   const { waitlistDelete, isDeleting } = useDeleteWaitlist();
   const [product, setProduct] = useState([]);
   const [form, setForm] = useState(false);
-  const queryClient = useQueryClient();
-  const [userName, setUserName] = useState("");
 
   const waitlists = waitlist?.waitlists ? waitlist?.waitlists : "";
-  console.log(waitlists);
-  const pagination = waitlist?.pagination;
+  const toatalPages = waitlist?.pagination.totalPages;
 
   const productID = useRef("");
   const userID = useRef("");
+  const [userName, setUsername] = useState("");
 
   //   console.log(waitlists);
 
@@ -42,24 +37,9 @@ function WaitlistTable() {
     userID.current = userId;
 
     setOpenModal(!openModal);
-
-    const keyExists = queryClient.getQueryData(["all_waitlist"]) !== undefined;
-    // console.log(keyExists);
-
-    // Set new data only if the key does not exist
-    if (!keyExists) {
-      queryClient.setQueryData(["all_waitlist"], waitlist);
-    }
   };
 
   const handleRemoveProduct = (userID: string, productID: string) => {
-    const keyExists = queryClient.getQueryData(["all_waitlist"]) !== undefined;
-
-    // Set new data only if the key does not exist
-    if (!keyExists) {
-      queryClient.setQueryData(["all_waitlist"], waitlist);
-    }
-
     waitlistDelete({ userID, productID });
 
     if (product.length == 0) setOpenModal(false);
@@ -67,29 +47,28 @@ function WaitlistTable() {
 
   const handleForm = (userId, userName) => {
     userID.current = userId;
-    setUserName(userName);
+    setUsername(userName);
 
     setForm(true);
     setOpenModal(!openModal);
   };
 
   const handleSetProduct = (userId) => {
-    // console.log(userId);
-    let prodcut = waitlists?.find((order) => {
-      if (order.user._id === userId) return order.waitlist;
+    let product = waitlists?.find((order) => {
+      if (order.user._id === userId) {
+        setUsername(order.user.username);
+        return order.waitlist;
+      }
     });
 
-    //  console.log(prodcut);
-    setProduct(prodcut);
+    setProduct(product);
     setOpenModal(!openModal);
-
-    const keyExists = queryClient.getQueryData(["all_waitlist"]) !== undefined;
-
-    // Set new data only if the key does not exist
-    if (!keyExists) {
-      queryClient.setQueryData(["all_waitlist"], waitlist);
-    }
   };
+
+  //? close modal
+  function handleCloseModal() {
+    setOpenModal(!openModal);
+  }
 
   if (loadingWaitlist)
     return <ClipLoader color="FFFFF" className="mt-[20%]" size={100} />;
@@ -123,33 +102,45 @@ function WaitlistTable() {
           </Table.Body>
         </Table>
       </div>
-      <PaginationCounter count={waitlists?.length || 0} />
 
-      <ModalComp>
-        {product.length !== 0 && (
-          <h1 className="ml-2 mb-2">Customer Name: {product?.user.name}</h1>
-        )}
-        {product.length !== 0
-          ? product?.waitlist.map((prod) => (
-              <WaitlistProduct
-                key={prod._id}
-                image={prod.images[0]}
-                userID={product?.user._id}
-                name={prod.name}
-                price={prod.price}
-                productID={prod._id}
-                customer_name={product?.user.name}
-                handleRemoveProduct={handleRemoveProduct}
-              />
-            ))
-          : ""}
+      {toatalPages > 1 ? <PaginationCounter count={toatalPages} /> : ""}
 
-        {form ? (
-          <AddWaitlist userId={userID.current} customerName={userName} />
-        ) : (
-          ""
-        )}
-      </ModalComp>
+      <Modal
+        show={openModal}
+        size="md"
+        onClose={() => setOpenModal(false)}
+        popup
+      >
+        <Modal.Header />
+        <Modal.Body>
+          {product.length !== 0 && (
+            <h1 className="ml-2 mb-2">Customer Name: {userName}</h1>
+          )}
+          {product.length !== 0
+            ? product?.waitlist.map((prod) => (
+                <WaitlistProduct
+                  key={prod._id}
+                  image={prod.images[0]}
+                  userID={product?.user._id}
+                  name={prod.name}
+                  price={prod.price}
+                  productID={prod._id}
+                  handleRemoveProduct={handleRemoveProduct}
+                />
+              ))
+            : ""}
+
+          {form ? (
+            <AddWaitlist
+              userId={userID.current}
+              customerName={userName}
+              handleCloseModal={handleCloseModal}
+            />
+          ) : (
+            ""
+          )}
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

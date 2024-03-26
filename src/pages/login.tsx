@@ -12,17 +12,20 @@ import { Loader } from "lucide-react";
 import { FormEvent, useEffect } from "react";
 import useLogin from "./hooks/useLogin";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export default function Login() {
-  const { cookies, userLogin, isPending } = useLogin();
+  const [cookies, removeCookie] = useCookies();
+  const { userLogin, isPending } = useLogin();
+
   const navigate = useNavigate();
 
+  //? check if user is loggedin
   useEffect(() => {
-    if (cookies.exc_prop_user) {
-      // console.log("object")
-      // navigate("/products");
+    if (typeof cookies.exc_prop_user == "string") {
+      navigate("/products");
     }
-  }, []);
+  }, [cookies.exc_prop_user]);
 
   function handleLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();

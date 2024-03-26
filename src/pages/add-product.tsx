@@ -12,12 +12,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AddProductProps } from "@/types";
 import { Loader } from "lucide-react";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import useAddProduct from "../Features/Products/useAddProduct";
+import { Select, Spinner } from "flowbite-react";
+import useCategory from "@/Features/Category/useCategory";
 
 export default function AddProduct() {
-  const [images, setImages] = React.useState<string[]>([]);
+  const [images, setImages] = useState([]);
+  const [productName, setProductName] = useState("");
+  const [cat, setCategory] = useState("");
+  const [price, setPrice] = useState("");
+  const [discount, setDiscount] = useState("");
+  const [description, setDescription] = useState("");
+  const [stock, setStock] = useState("");
+
   const { isAddingProduct, handleAddProcduct } = useAddProduct();
+  const { category, error, loadingCatgory } = useCategory();
 
   /**
    * Generates a base64 string from a given File object.
@@ -25,49 +35,32 @@ export default function AddProduct() {
    * @param {File | null} file - The File object to generate the base64 string from.
    * @return {void}
    */
-  const getBase64Strings = (file: File | null) => {
-    const reader = new FileReader();
-    let dataUrl: string | null | ArrayBuffer | undefined = null;
-
-    reader.onload = (e) => {
-      dataUrl = e.target?.result;
-      // console.log("Image Data as String:", dataUrl)
-      setImages((prev) => [...prev, dataUrl as string] || (dataUrl as string));
-    };
-
-    reader.readAsDataURL(file as File);
-  };
-
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const files = event.target.files;
-
-    if (!files) return;
-
-    for (let index = 0; index < files.length; index++) {
-      const file = files[index];
-
-      getBase64Strings(file);
+  const handleFileChange = (e) => {
+    const selectedFiles = e.target.files;
+    if (selectedFiles) {
+      const newImages = Array.from(selectedFiles);
+      setImages((prevImages) => [...prevImages, ...newImages]);
     }
-
-    // setSelectedFiles(files)
   };
 
-  async function handleCreateProduct(e: FormEvent<HTMLFormElement>) {
+  async function handleCreateProduct(e) {
     e.preventDefault();
+    let formData = new FormData();
+    console.log(images);
 
-    const formData = Object.fromEntries(
-      new FormData(e.currentTarget)
-    ) as unknown as AddProductProps;
+    images.forEach((image) => {
+      formData.append(`images`, image);
+    });
 
-    const payload = {
-      ...formData,
-      images: images,
-    };
+    formData.append("name", productName);
+    formData.append("category", cat);
+    formData.append("price", price);
+    formData.append("stock", stock);
+    formData.append("discountPrice", discount);
+    formData.append("description", description);
 
-    console.log(payload);
-    handleAddProcduct(payload);
+    //@ts-ignore
+    handleAddProcduct(formData);
   }
 
   return (
@@ -85,23 +78,47 @@ export default function AddProduct() {
         <CardContent>
           <form
             onSubmit={handleCreateProduct}
-            className="flex flex-col w-full gap-5 "
+            className="flex flex-col w-full gap-5"
           >
             <div className="flex flex-col items-start w-full gap-5 lg:flex-row">
               <section className="w-full space-y-2">
                 <div className="w-full space-y-1 text-left">
                   <Label htmlFor="name">Name</Label>
-                  <Input className="" name="name" type="text" required />
+                  <Input
+                    className=""
+                    onChange={(e) => setProductName(e.target.value)}
+                    name="name"
+                    type="text"
+                    required
+                  />
                 </div>
 
                 <div className="w-full space-y-1 text-left">
                   <Label htmlFor="description">Description</Label>
-                  <Input className="" name="description" type="text" required />
+                  <Input
+                    onChange={(e) => setDescription(e.target.value)}
+                    className=""
+                    name="description"
+                    type="text"
+                    required
+                  />
                 </div>
 
                 <div className="w-full space-y-1 text-left">
                   <Label htmlFor="category">Category</Label>
-                  <Input className="" name="category" type="text" required />
+                  <Select
+                    onChange={(e) => setCategory(e.target.value)}
+                    id="category"
+                    name="category"
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {category?.map((cat) => (
+                      <option key={cat._id} value={cat._id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </Select>
                 </div>
 
                 <div className="w-full space-y-1 text-left">
@@ -111,6 +128,7 @@ export default function AddProduct() {
                     name="price"
                     type="number"
                     min={0}
+                    onChange={(e) => setPrice(e.target.value)}
                     required
                   />
                 </div>
@@ -124,6 +142,7 @@ export default function AddProduct() {
                     name="discountPrice"
                     type="number"
                     min={0}
+                    onChange={(e) => setDiscount(e.target.value)}
                     required
                   />
                 </div>
@@ -135,6 +154,7 @@ export default function AddProduct() {
                     name="stock"
                     type="number"
                     min={0}
+                    onChange={(e) => setStock(e.target.value)}
                     required
                   />
                 </div>
@@ -148,6 +168,7 @@ export default function AddProduct() {
                     min={0}
                     multiple
                     onChange={(e) => handleFileChange(e)}
+                    required
                   />
                 </div>
               </section>

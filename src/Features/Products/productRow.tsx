@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Image } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -6,9 +5,11 @@ import { formatNigerianPrice } from "@/lib/utils";
 import { determineStatus } from "@/lib/utils";
 import Options from "@/components/ui/Options";
 import { ProductRowProps } from "@/types";
+import { Badge } from "flowbite-react";
 
 function ProductRow({ products }: ProductRowProps) {
-  const { _id, name, description, createdAt, stock, price, images } = products;
+  const { _id, name, description, createdAt, stock, price, images, status } =
+    products;
 
   return (
     <TableRow>
@@ -19,7 +20,7 @@ function ProductRow({ products }: ProductRowProps) {
         >
           {!images[0] ? (
             <div className="min-w-[140px] min-h-[100px] bg-muted rounded-md grid place-items-center">
-              <Image className="" />
+              <Image />
             </div>
           ) : (
             <div className="min-w-[140px] min-h-[100px] relative">
@@ -40,26 +41,22 @@ function ProductRow({ products }: ProductRowProps) {
         {new Date(createdAt).toDateString()}
         {/* {dateFormatter.format(product.createdAt as unknown as Date)} */}
       </TableCell>
-      <TableCell className="text-left w-52">
-        <Button
-          variant="ghost"
-          className={`
-        ${
-          +stock < 1
-            ? "bg-red-300 text-red-700"
-            : +stock < 5
-            ? "bg-amber-100 text-amber-700"
-            : "bg-green-100 text-green-900"
-        }
-      `}
-        >
-          {determineStatus(stock)}
-        </Button>
+      <TableCell>
+        <div className="w-1/2 text-center">
+          <Badge className="px-4" color={determineStatus(stock)?.color}>
+            {determineStatus(stock)?.text}
+          </Badge>
+        </div>
       </TableCell>
       <TableCell>
-        <div className="flex items-center justify-end gap-3">
+        <div className="flex items-center justify-end py-3">
           {formatNigerianPrice(price as number)}
-          <Options productId={_id} />
+        </div>
+      </TableCell>
+
+      <TableCell>
+        <div className="flex justify-end">
+          <Options productId={_id} status={status} />
         </div>
       </TableCell>
     </TableRow>

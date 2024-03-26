@@ -1,6 +1,11 @@
 import { CalendarCheck2, Receipt, TrendingUp, User2Icon } from "lucide-react";
 import { Badge } from "flowbite-react";
-import { checkOrderStatus, checkPaidStatus, formatDate } from "@/lib/utils";
+import {
+  checkOrderStatus,
+  checkPaidStatus,
+  dateFormat,
+  formatDate,
+} from "@/lib/utils";
 
 function OrderHeader({ orders }) {
   const { _id, user, orderStatus, paymentStatus, createdAt } = orders;
@@ -24,7 +29,7 @@ function OrderHeader({ orders }) {
             <h1 className="text-slate-400 capitalize dark:text-white dark:font-light">
               CUSTOMER NAME
             </h1>
-            <span className=" font-bold text-sm">{user}</span>
+            <span className=" font-bold text-sm">{user.username}</span>
           </div>
 
           <User2Icon size={38} />
@@ -36,7 +41,7 @@ function OrderHeader({ orders }) {
             <h1 className="text-slate-400 font-light capitalize dark:text-white">
               DATE
             </h1>
-            <span className=" font-bold text-sm">{formatDate(createdAt)}</span>
+            <span className=" font-bold text-sm">{dateFormat(createdAt)}</span>
           </div>
 
           <CalendarCheck2 size={38} />

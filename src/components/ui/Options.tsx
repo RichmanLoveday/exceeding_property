@@ -1,48 +1,47 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
-import { BadgeX, MoreVertical } from "lucide-react";
+import { MoreVertical } from "lucide-react";
 import { Link } from "react-router-dom";
 import useDisableProduct from "@/Features/Products/useDisableProduct";
+import { Dropdown } from "flowbite-react";
+import useEnableProduct from "@/Features/Products/useEnableProduct";
 
-const Options = ({ productId, status }: { productId: string }) => {
+const Options = ({
+  productId,
+  status,
+}: {
+  productId: string;
+  status: string;
+}) => {
   const { productDisable, isDisabaling } = useDisableProduct();
+  const { productEnable, isEnabling } = useEnableProduct();
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <MoreVertical />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuSeparator />
+    <Dropdown
+      label=""
+      renderTrigger={() => <MoreVertical className="cursor-pointer" />}
+      dismissOnClick={true}
+    >
+      <Dropdown.Item>
+        <Link to={`/product/${productId}`}>Product Details</Link>
+      </Dropdown.Item>
 
-        <DropdownMenuItem>
-          <Link to={`/product/${productId}`}>Product Details</Link>
-        </DropdownMenuItem>
-
-        {!status ? (
-          <DropdownMenuItem>
-            <button
-              type="button"
-              disabled={isDisabaling}
-              onClick={() => productDisable(productId)}
-              className=" flex justify-between p-2 my-2 cursor-pointer"
-            >
-              Disable
-              <BadgeX />
-            </button>
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem>
-            <Link to={`/product/${productId}`}>Disable Product</Link>
-          </DropdownMenuItem>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      {status ? (
+        <Dropdown.Item
+          className="flex justify-center"
+          disabled={isDisabaling}
+          onClick={() => productDisable(productId)}
+        >
+          <span>Disable</span>
+        </Dropdown.Item>
+      ) : (
+        <Dropdown.Item
+          className="flex justify-center"
+          disabled={isEnabling}
+          onClick={() => productEnable(productId)}
+        >
+          <span>Enable</span>
+        </Dropdown.Item>
+      )}
+    </Dropdown>
   );
 };
 

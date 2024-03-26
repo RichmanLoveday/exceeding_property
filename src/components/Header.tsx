@@ -7,15 +7,18 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Header() {
   // const { logout, isLoading } = useLogout();
-  const [cookies, removeCookie] = useCookies(["exc_prop_user"]);
+  const [cookies, removeCookie] = useCookies();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   function handleLogout() {
+    // Check if the cookie exists
     if (cookies.exc_prop_user) {
       removeCookie("exc_prop_user", { path: "/" });
       queryClient.removeQueries();
       navigate("/login");
+    } else {
+      console.log("Cookie 'exc_prop_user' not found.");
     }
   }
 
@@ -31,15 +34,19 @@ export default function Header() {
           </Button>
 
           <Button asChild variant={"link"}>
+            <Link to={"/category"}>Category</Link>
+          </Button>
+
+          <Button asChild variant={"link"}>
             <Link to={"/orders"}>Orders</Link>
           </Button>
 
           <Button asChild variant={"link"}>
-            <Link to={"/waitlist"}>Waitlist</Link>
+            <Link to={"/waitlist"}>Wishlist</Link>
           </Button>
 
           <Button asChild variant={"link"}>
-            <Link to={"/settings"}>Settings</Link>
+            <Link to={"/transaction"}>Transactions</Link>
           </Button>
         </div>
         <div className="flex items-center gap-5">

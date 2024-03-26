@@ -1,13 +1,16 @@
 import { Pagination } from "flowbite-react";
 import { useState } from "react";
 
-function PaginationCounter({ count }) {
-  const [currentPage, setCurrentPage] = useState(1);
+function PaginationCounter({ count, handlePageChange, currentpage }) {
+  const [currentPage, setCurrentPage] = useState(currentpage);
 
-  const onPageChange = (page: number) => setCurrentPage(page);
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+    handlePageChange(page);
+  };
 
   return (
-    <div className="flex overflow-x-auto sm:justify-center mb-5">
+    <div className="flex overflow-x-auto sm:justify-center my-5">
       <Pagination
         currentPage={currentPage}
         totalPages={count}

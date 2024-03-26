@@ -1,11 +1,23 @@
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PageHeader from "@/components/ui/PageHeader";
 import ProductsTable from "@/Features/Products/ProductsTable";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 export default function Products() {
+  const [cookies, setCookie] = useCookies();
+  const navigate = useNavigate();
+
+  //? check user login
+  useEffect(() => {
+    if (typeof cookies.exc_prop_user == "object") {
+      navigate("/login");
+    }
+  }, [cookies.exc_prop_user]);
+
   return (
     <>
       <div className="h-1 my-10" />
