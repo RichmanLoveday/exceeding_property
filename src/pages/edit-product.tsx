@@ -20,10 +20,7 @@ import useCategory from "@/Features/Category/useCategory";
 import { Select, Spinner, TextInput } from "flowbite-react";
 import { useCookies } from "react-cookie";
 import { Loader } from "lucide-react";
-import {
-  DeleteImageComp,
-  DeleteProductImageComp,
-} from "@/Features/Products/DeleteImageComp";
+import { DeleteProductImageComp } from "@/Features/Products/DeleteImageComp";
 
 export default function EditProduct() {
   const { productData, isLoading } = useProductDatails();
