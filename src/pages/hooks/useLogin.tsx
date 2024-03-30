@@ -33,7 +33,7 @@ function useLogin() {
       navigate("/products");
     },
     onError: (data) => {
-      console.log(data);
+      //@ts-ignore
       toast.error(data?.response?.data?.message);
     },
   });

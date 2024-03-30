@@ -3,6 +3,7 @@ import { Modal } from "flowbite-react";
 import { useContext } from "react";
 
 function ModalComp({ children }) {
+  //@ts-ignore
   const { openModal, setOpenModal } = useContext(MyContext);
 
   return (

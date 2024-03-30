@@ -8,11 +8,13 @@ function useUpdateOrderStatus() {
   const [cookies] = useCookies(["exc_prop_user"]);
 
   const { mutate: updateStatus, isPending: isUpdating } = useMutation({
+    //@ts-ignore
     mutationFn: ({ orderId, type }) =>
       updateOrderStatus(orderId, type, cookies.exc_prop_user),
 
     onSuccess: (data) => {
       toast.success(`Order is set to ${data.orderStatus}`);
+      //@ts-ignore
       queryClient.invalidateQueries({ active: true });
     },
 

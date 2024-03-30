@@ -23,10 +23,12 @@ function OrdersTable() {
   const toatalPages = orders?.totalDocs;
   const handleOrderId = (orderId: string) => {
     setOpenModal(!openModal);
+    //@ts-ignore
     setOrderId(orderId);
   };
 
   const handleUpdateOrder = (orderId: string, type: string) => {
+    //@ts-ignore
     updateStatus({ orderId, type });
   };
 

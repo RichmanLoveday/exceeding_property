@@ -14,10 +14,12 @@ export default function useAddProduct() {
       mutationFn: (products) => createProduct(products, cookies.exc_prop_user),
       onSuccess: (res) => {
         toast.success(res.message);
+        //@ts-ignore
         queryclient.invalidateQueries({ active: true });
 
         navigate("/products");
       },
+      //@ts-ignore
       onError: (err) => toast.error(err.response.data.message),
     }
   );

@@ -1,6 +1,5 @@
 import { formatNigerianPrice } from "@/lib/utils";
-function OrderItems({ orders = {} }) {
-  console.log(orders);
+function OrderItems({ orders }) {
   const { products } = orders;
   return (
     <div className="overflow-x-auto">

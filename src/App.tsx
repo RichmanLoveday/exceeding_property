@@ -160,19 +160,17 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <MyContext.Provider value={{ pageNum, setPageNum }}>
-          {/* <Header /> */}
-          <RouterProvider router={router} />
-          <ReactQueryDevtools initialIsOpen={false} />
-          <Toaster
-            position="top-center"
-            reverseOrder={false}
-            gutter={10}
-            toastOptions={{
-              duration: 2500,
-            }}
-          />
-        </MyContext.Provider>
+        {/* <Header /> */}
+        <RouterProvider router={router} />
+        <ReactQueryDevtools initialIsOpen={false} />
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+          gutter={10}
+          toastOptions={{
+            duration: 2500,
+          }}
+        />
       </ThemeProvider>
     </QueryClientProvider>
   );

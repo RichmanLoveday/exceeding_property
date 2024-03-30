@@ -46,15 +46,27 @@ function OrderEdit({ orderId, productId, quantityValue }) {
           />
           {errors?.quantity ? (
             <div className=" bg-red-600/70 text-white font-light italic w-full p-1 rounded-sm">
-              {errors?.quantity?.message}
+              {/* {errors?.quantity?.message} */}
             </div>
           ) : (
             ""
           )}
-          <TextInput type="hidden" {...register("orderId")} value={orderId} />
           <TextInput
             type="hidden"
-            {...register("productId")}
+            {
+              //@ts-ignore
+              ...register("orderId")
+            }
+            name="orderId"
+            value={orderId}
+          />
+          <TextInput
+            type="hidden"
+            name="productId"
+            {
+              //@ts-ignore
+              ...register("productId")
+            }
             value={productId}
           />
         </div>

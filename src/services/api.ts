@@ -304,11 +304,7 @@ export async function updateCategory(
   return res.data;
 }
 
-export async function waitlistRemove(
-  userId: string,
-  productId: string,
-  token: string
-) {
+export async function waitlistRemove(userId, productId, token) {
   const res = await axios.delete(`${BASE_URL}/waitlist/admin/remove`, {
     headers: {
       Authorization: `Bearer ${token}`,
