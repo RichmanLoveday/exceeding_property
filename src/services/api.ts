@@ -67,6 +67,24 @@ export async function editProduct(productId, products, token) {
   return res.data;
 }
 
+//? delete product image
+export async function deletProductImage(productId, image_url, token) {
+  console.log(productId, image_url, token);
+  const res = await axios.post(
+    `${BASE_URL}/products/${productId}/image`,
+    {
+      image_url: image_url,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.data;
+}
+
 export async function getOrders(token: string, pageNum: number) {
   const res = await axios.get(
     `${BASE_URL}/order/admin-orders?page=${pageNum}&limit=5`,
@@ -206,7 +224,6 @@ export async function getCategories(token: string) {
     },
   });
 
-  console.log(res.data);
   return res.data.data;
 }
 
@@ -245,6 +262,24 @@ export async function deleteCategory(categoryID: string, token: string) {
       Authorization: `Bearer ${token}`,
     },
   });
+
+  return res.data;
+}
+
+//? delete categoru image
+export async function deletCategoryImage(categoryId, image_url, token) {
+  console.log(categoryId, image_url, token);
+  const res = await axios.post(
+    `${BASE_URL}/categories/${categoryId}/image`,
+    {
+      image_url: image_url,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   return res.data;
 }

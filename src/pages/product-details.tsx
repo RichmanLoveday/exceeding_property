@@ -31,7 +31,7 @@ export default function ProductDetails() {
     }
   }, [cookies.exc_prop_user]);
 
-  const product = productData?.data as ProductProps;
+  const product = productData?.data;
 
   const discount = calculateDiscountPercentage(
     product?.price as number,

@@ -45,7 +45,7 @@ function CategoryTable() {
 
   //? handle edit data
   function handleEditCategory(categoryId: string) {
-    const categoryFind = category.find((ele) => ele._id == categoryId);
+    const categoryFind = categories.find((ele) => ele._id == categoryId);
 
     //? store neccessary states
     setCategoryFind(categoryFind);
