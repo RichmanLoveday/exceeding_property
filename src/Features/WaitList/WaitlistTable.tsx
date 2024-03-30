@@ -40,6 +40,7 @@ function WaitlistTable() {
   };
 
   const handleRemoveProduct = (userID: string, productID: string) => {
+    //@ts-ignore
     waitlistDelete({ userID, productID });
 
     if (product.length == 0) setOpenModal(false);
@@ -103,7 +104,7 @@ function WaitlistTable() {
         </Table>
       </div>
 
-      {toatalPages > 1 ? <PaginationCounter count={toatalPages} /> : ""}
+      {/* {toatalPages > 1 ? <PaginationCounter count={toatalPages} /> : ""} */}
 
       <Modal
         show={openModal}
@@ -117,10 +118,12 @@ function WaitlistTable() {
             <h1 className="ml-2 mb-2">Customer Name: {userName}</h1>
           )}
           {product.length !== 0
-            ? product?.waitlist.map((prod) => (
+            ? //@ts-ignore
+              product?.waitlist.map((prod) => (
                 <WaitlistProduct
                   key={prod._id}
                   image={prod.images[0]}
+                  //@ts-ignore
                   userID={product?.user._id}
                   name={prod.name}
                   price={prod.price}

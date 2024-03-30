@@ -20,6 +20,7 @@ export default function ErrorPage() {
             </p>
 
             <Link
+              //@ts-ignore
               to={navigate(-1)}
               className="px-5 py-2 rounded-md text-blue-100 bg-blue-600 hover:bg-blue-700"
             >

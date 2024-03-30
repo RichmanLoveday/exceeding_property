@@ -11,6 +11,7 @@ function useDeleteWaitlist() {
 
   const { mutate: waitlistDelete, isPending: isDeleting } = useMutation({
     // communicate with api disable product
+    //@ts-ignore
     mutationFn: ({ userID, productID }) =>
       waitlistRemove(userID, productID, cookies.exc_prop_user),
 

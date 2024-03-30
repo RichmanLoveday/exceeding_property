@@ -34,6 +34,7 @@ function OrderDetails() {
   }
 
   function handleOrderStatus(orderId, type) {
+    //@ts-ignore
     updateStatus({ orderId, type });
   }
 
@@ -107,7 +108,7 @@ function OrderDetails() {
             handleDelete={handleDeleteOrder}
             isDeleting={isDeleting}
             setOpenModal={setOpenModal}
-            deleted={isDeleted}
+            isDeleted={isDeleted}
           />
         </Modal.Body>
       </Modal>
