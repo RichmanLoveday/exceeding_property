@@ -20,6 +20,10 @@ import useCategory from "@/Features/Category/useCategory";
 import { Select, Spinner, TextInput } from "flowbite-react";
 import { useCookies } from "react-cookie";
 import { Loader } from "lucide-react";
+import {
+  DeleteImageComp,
+  DeleteProductImageComp,
+} from "@/Features/Products/DeleteImageComp";
 
 export default function EditProduct() {
   const { productData, isLoading } = useProductDatails();
@@ -78,6 +82,11 @@ export default function EditProduct() {
     console.log(product?.id);
     //@ts-ignore
     handleEditing({ productID: product?.id, formData: formData });
+  }
+
+  function deleteImage(image_url) {
+    //@ts-ignore
+    imageDelete({ productID: product?.id, image_url: image_url });
   }
 
   if (isLoading) {
@@ -209,18 +218,23 @@ export default function EditProduct() {
                   min={0}
                   multiple
                   onChange={(e) => handleFileChange(e)}
+                  required={product?.images.length == 0 ? true : false}
                 />
               </div>
               <div className="flex justify-center space-x-2 items-center w-full p-2 mt-8 flex-wrap">
                 {product?.images.map((img) => {
                   return (
-                    <div className="">
+                    <div className="relative">
                       <img
                         title="images"
                         key={img}
                         src={img}
                         width={100}
                         height={100}
+                      />
+                      <DeleteProductImageComp
+                        productID={product?.id}
+                        image_url={img}
                       />
                     </div>
                   );
