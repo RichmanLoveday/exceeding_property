@@ -150,7 +150,7 @@ export function checkTransactionStatus(status: string) {
   }
 
   if (status == "Unverified") {
-    className = "warning";
+    className = "failure";
   }
 
   return { className };

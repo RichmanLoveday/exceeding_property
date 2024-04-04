@@ -372,3 +372,31 @@ export async function getUserTransactions(
 
   return res.data.data;
 }
+
+export async function updateStatus(token, transID, status) {
+  const res = await axios.put(
+    `${BASE_URL}/transactions/${transID}/status`,
+    {
+      status: status,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return res.data.data;
+}
+
+export async function deleteTransaction(token, transID) {
+  // console.log(token, transID);
+  const res = await axios.delete(`${BASE_URL}/transactions/${transID}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res.data);
+  return res.data.data;
+}
