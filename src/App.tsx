@@ -26,6 +26,8 @@ import ExternalLayout from "./components/ui/ExternalLayout";
 import Category from "./pages/Category";
 import Transaction from "./pages/Transaction";
 import UserTransactions from "./pages/UserTransactions";
+import Users from "./pages/Users";
+import UserOrders from "./pages/userOrders";
 
 const router = createBrowserRouter([
   {
@@ -94,6 +96,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/order/user/:userId",
+        element: (
+          <ProtectedRoute>
+            <UserOrders />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "/waitlist",
         element: (
           <ProtectedRoute>
@@ -134,10 +144,18 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/users",
+        element: (
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "*",
         element: (
           <ProtectedRoute>
-            <ErrorPage />
+            <Products />
           </ProtectedRoute>
         ),
       },
