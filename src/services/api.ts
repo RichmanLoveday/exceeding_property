@@ -430,18 +430,18 @@ export async function getPaginatedUsers(token, pageNum) {
   return res.data.data;
 }
 
-// export async function updateUsers(userID, token) {
-//   const res = await axios.put(
-//     `${BASE_URL}/transactions/${transID}/status`,
-//     {
-//       status: status,
-//     },
-//     {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     }
-//   );
-//   console.log(res);
-//   return res.data.data;
-// }
+export async function updateUserss(userID, token) {
+  const res = await axios.put(
+    `${BASE_URL}/transactions/${transID}/status`,
+    {
+      status: status,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  console.log(res);
+  return res.data.data;
+}
