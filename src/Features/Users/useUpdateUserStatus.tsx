@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-function useOrderDelete() {
+function useUpdateUserStatus() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [cookies] = useCookies(["exc_prop_user"]);
@@ -34,4 +34,4 @@ function useOrderDelete() {
   return { orderDelete, isDeleting, isDeleted };
 }
 
-export default useOrderDelete;
+export default useUpdateUserStatus;

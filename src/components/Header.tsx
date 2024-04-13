@@ -48,6 +48,10 @@ export default function Header() {
           <Button asChild variant={"link"}>
             <Link to={"/transaction"}>Transactions</Link>
           </Button>
+
+          <Button asChild variant={"link"}>
+            <Link to={"/users"}>Users</Link>
+          </Button>
         </div>
         <div className="flex items-center gap-5">
           <ModeToggle />

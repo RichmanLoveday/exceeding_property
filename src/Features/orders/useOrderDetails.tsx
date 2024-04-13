@@ -7,8 +7,6 @@ function useOrderDetails() {
   const { orderId } = useParams();
   const [cookies] = useCookies(["exc_prop_user"]);
 
-  console.log(orderId);
-
   const {
     data: orderData,
     isLoading,

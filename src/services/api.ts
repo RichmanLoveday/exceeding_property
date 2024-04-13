@@ -161,6 +161,24 @@ export async function getOrderById(orderId: string, token: string) {
   return res.data.data;
 }
 
+export async function getUserOrdersById(
+  userId: string,
+  pageNum: number,
+  token: string
+) {
+  const res = await axios.get(
+    `${BASE_URL}/order/user/${userId}?page=${pageNum}&limit=10`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  console.log(res.data.data);
+  return res.data.data;
+}
+
 export async function updateOrderStatus(
   orderId: string,
   type: string,
@@ -397,6 +415,33 @@ export async function deleteTransaction(token, transID) {
     },
   });
 
-  console.log(res.data);
   return res.data.data;
 }
+
+//? get paginated category
+export async function getPaginatedUsers(token, pageNum) {
+  const res = await axios.get(`${BASE_URL}/user?page=${pageNum}&limit=5`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  console.log(res);
+  return res.data.data;
+}
+
+// export async function updateUsers(userID, token) {
+//   const res = await axios.put(
+//     `${BASE_URL}/transactions/${transID}/status`,
+//     {
+//       status: status,
+//     },
+//     {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     }
+//   );
+//   console.log(res);
+//   return res.data.data;
+// }
