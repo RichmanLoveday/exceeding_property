@@ -53,13 +53,19 @@ export default function Login() {
               type="email"
               name="email"
               placeholder="Enter your email address"
+              value="jc@gmail.com"
             />
           </div>
 
           <div className="space-y-2 text-left">
             <Label>Password</Label>
 
-            <Input type="password" name="password" placeholder="********" />
+            <Input
+              type="password"
+              name="password"
+              placeholder="********"
+              value="password"
+            />
           </div>
 
           <Button className="" type="submit">
