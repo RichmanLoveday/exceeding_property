@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://exceedingproperties.onrender.com";
+const BASE_URL = "https://api.shop-point.store";
 
 export async function LoginUser(email: string, password: string) {
   const res = await axios.post(`${BASE_URL}/auth/login`, {
@@ -63,7 +63,6 @@ export async function editProduct(productId, products, token) {
     },
   });
 
-  console.log(res);
   return res.data;
 }
 
